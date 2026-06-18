@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FaCalendarAlt, FaUser, FaPlane, FaInfoCircle, FaExclamationTriangle } from "react-icons/fa";
 import Navbar from "../components/Navbar";
-import axios from "axios";
+import api from "../api/axios";
 
 function ShareView() {
   const { shareId } = useParams();
@@ -14,7 +14,7 @@ function ShareView() {
     const fetchSharedItinerary = async () => {
       try {
         // Points directly to your public backend share route without an auth header
-        const response = await axios.get(`http://localhost:5000/api/share/${shareId}`);
+        const response = await api.get(`/share/${shareId}`);
         if (response.data && response.data.data && response.data.data.itinerary) {
           setItData(response.data.data.itinerary);
         } else if (response.data && response.data.itinerary) {
