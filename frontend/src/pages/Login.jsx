@@ -2,12 +2,12 @@ import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock, FaSpinner } from "react-icons/fa";
 
-import { AuthLayout } from "../components/AuthLayout";
+import { AuthLayout } from "../components/authLayout";
 import FormInput from "../components/formInput";
 import {
   ToastContainer,
   useToast,
-} from "../components/Toast";
+} from "../components/toast";
 
 import { AuthContext } from "../context/AuthContext";
 import { loginUser } from "../services/authService";
