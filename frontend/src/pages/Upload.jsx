@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCloudUploadAlt, FaFilePdf, FaSpinner, FaTimesCircle, FaCheckCircle } from "react-icons/fa";
 import Navbar from "../components/Navbar";
-import axios from "axios";
+import api from "../api/axios";
 
 function Upload() {
   const navigate = useNavigate();
@@ -16,8 +16,8 @@ function Upload() {
     setErrorMessage("");
     setSuccessMessage("");
     const selectedFiles = Array.from(e.target.files);
-    
-    const validFiles = selectedFiles.filter(file => 
+
+    const validFiles = selectedFiles.filter(file =>
       file.type === "application/pdf" || file.type.startsWith("image/")
     );
 
@@ -29,65 +29,85 @@ function Upload() {
   };
 
   const handleUploadSubmit = async (e) => {
-    e.preventDefault();
-    if (files.length === 0) {
-      setErrorMessage("Please stage at least one document vector node to ingest.");
-      return;
-    }
+  e.preventDefault();
 
-    setIsProcessing(true);
-    setErrorMessage("");
-    setSuccessMessage("");
+  if (files.length === 0) {
+    setErrorMessage("Please stage at least one document vector node to ingest.");
+    return;
+  }
 
-    const token = localStorage.getItem("token");
-    let processingFailed = false;
+  setIsProcessing(true);
+  setErrorMessage("");
+  setSuccessMessage("");
 
-    // SEQUENTIAL LOOP: Processes each document sequentially to respect Gemini API limits
-    for (let i = 0; i < files.length; i++) {
-      const currentFile = files[i];
-      setCurrentProcessingFile(currentFile.name);
+  let processingFailed = false;
 
-      const formData = new FormData();
-      formData.append("document", currentFile); // Appends exactly ONE file per pipeline run
+  for (let i = 0; i < files.length; i++) {
+    const currentFile = files[i];
+    setCurrentProcessingFile(currentFile.name);
 
-      try {
-        await axios.post("http://localhost:5000/api/itineraries/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    const formData = new FormData();
+    formData.append("document", currentFile);
 
-        // Optional: Delivers a 2-second cooldown padding break if you are uploading multiple files
-        if (files.length > 1 && i < files.length - 1) {
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-        }
+    try {
+      await api.post("/itineraries/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-      } catch (error) {
-        console.error(`Ingestion Error Stack for ${currentFile.name}:`, error);
-        processingFailed = true;
-        
-        const errorString = error.response?.data?.message || error.message || "";
-        if (errorString.includes("429") || errorString.toLowerCase().includes("quota") || error.response?.status === 429) {
-          setErrorMessage(`AI Engine Quota Exceeded (429) at file: "${currentFile.name}". Please wait 60 seconds before trying remaining queue.`);
-        } else {
-          setErrorMessage(`Error parsing "${currentFile.name}": ${error.response?.data?.message || "Internal network failure."}`);
-        }
-        break; // Breaks out of loop immediately if rate limits hit
+      if (files.length > 1 && i < files.length - 1) {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       }
-    }
+    } catch (error) {
+      console.error(
+        `Ingestion Error Stack for ${currentFile.name}:`,
+        error
+      );
 
-    setIsProcessing(false);
-    setCurrentProcessingFile("");
+      processingFailed = true;
 
-    if (!processingFailed) {
-      setSuccessMessage("Document structural logs compiled and indexed successfully!");
-      setFiles([]);
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
+      const errorString =
+        error.response?.data?.message ||
+        error.message ||
+        "";
+
+      if (
+        error.response?.status === 429 ||
+        errorString.includes("429") ||
+        errorString.toLowerCase().includes("quota")
+      ) {
+        setErrorMessage(
+          `AI Engine Quota Exceeded (429) at file: "${currentFile.name}". Please wait 60 seconds before trying remaining queue.`
+        );
+      } else {
+        setErrorMessage(
+          `Error parsing "${currentFile.name}": ${
+            error.response?.data?.message ||
+            "Internal network failure."
+          }`
+        );
+      }
+
+      break;
     }
-  };
+  }
+
+  setIsProcessing(false);
+  setCurrentProcessingFile("");
+
+  if (!processingFailed) {
+    setSuccessMessage(
+      "Document structural logs compiled and indexed successfully!"
+    );
+
+    setFiles([]);
+
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 2000);
+  }
+};
 
   return (
     <div className="min-h-screen bg-[#F5F7FA] text-[#333A4A] font-sans antialiased">
@@ -95,7 +115,7 @@ function Upload() {
 
       <div className="max-w-2xl mx-auto px-4 py-12">
         <div className="bg-white border border-gray-200 rounded-2xl p-6 lg:p-10 shadow-sm space-y-6">
-          
+
           <div>
             <span className="text-[9px] font-mono font-black uppercase tracking-widest bg-[#1A2B5F]/10 text-[#1A2B5F] px-2.5 py-1 rounded-md">
               Data Ingestion Port
@@ -124,12 +144,12 @@ function Upload() {
           )}
 
           <form onSubmit={handleUploadSubmit} className="space-y-6">
-            
+
             {/* DRAG & DROP AREA */}
             <div className="relative border-2 border-dashed border-gray-200 hover:border-[#B8961E] bg-[#F5F7FA]/50 rounded-2xl p-8 text-center transition-all group">
-              <input 
-                type="file" 
-                multiple 
+              <input
+                type="file"
+                multiple
                 onChange={handleFileChange}
                 disabled={isProcessing}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
@@ -170,7 +190,7 @@ function Upload() {
             >
               {isProcessing ? (
                 <>
-                  <FaSpinner className="animate-spin text-sm" /> 
+                  <FaSpinner className="animate-spin text-sm" />
                   <span>Parsing: {currentProcessingFile || "Matrix Engine"}...</span>
                 </>
               ) : (
