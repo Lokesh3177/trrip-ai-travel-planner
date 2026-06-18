@@ -1,4 +1,4 @@
-````markdown
+
 # ✈️ TRRIP AI – Smart Travel Itinerary Generator
 
 <p align="center">
@@ -13,52 +13,69 @@
 </p>
 
 <p align="center">
-
-AI-powered MERN Stack application that extracts travel information from flight tickets and hotel bookings to automatically generate structured travel itineraries.
-
+AI-powered MERN Stack web application that extracts travel information from uploaded travel documents and automatically generates structured travel itineraries using OCR and AI.
 </p>
+
+---
+
+# 🌐 Live Demo
+
+### Frontend
+https://trrip-ai-travel-planner.vercel.app
+
+### Backend API
+https://trrip-ai-travel-planner.onrender.com
 
 ---
 
 # 📖 Project Overview
 
-TRRIP AI is an AI-powered travel itinerary management system built using the MERN Stack. The application allows users to upload travel documents such as flight tickets, hotel booking confirmations, and travel-related PDFs or images.
+TRRIP AI is an AI-powered travel itinerary management system developed using the MERN Stack.
 
-Using OCR, PDF parsing, and Groq AI, the system extracts important travel information and automatically generates a structured itinerary. Users can securely manage, share, and organize all their travel plans from a single dashboard.
+The application enables users to upload travel-related documents such as:
+
+- ✈ Flight Tickets
+- 🏨 Hotel Booking Confirmations
+- 📄 Travel PDFs
+- 🖼 Travel Images
+
+Using OCR (Tesseract OCR), PDF parsing, and Groq AI, the application extracts travel information and automatically generates a structured travel itinerary.
+
+Users can securely manage, organize, share, and access their travel plans from a centralized dashboard.
 
 ---
 
 # ✨ Features
 
-- 🔐 Secure User Registration & Login (JWT Authentication)
-- 📄 Upload Flight Tickets, Hotel Bookings & Travel Documents
-- 🖼️ OCR Text Extraction using Tesseract OCR
+- 🔐 Secure User Authentication (JWT)
+- 👤 User Registration & Login
+- 📄 Upload Flight Tickets & Hotel Bookings
+- 🖼 OCR Text Extraction (Tesseract OCR)
 - 📑 PDF Text Extraction
-- 🤖 AI-Powered Itinerary Generation using Groq AI
-- ✈️ Automatic Flight Information Extraction
-- 🏨 Automatic Hotel Booking Information Extraction
-- 📋 Dashboard for Trip Management
-- 📂 Store and Manage Travel Itineraries
-- 👁️ View Complete Trip Details
-- 🔗 Share Trips using Public Links
-- 🗑️ Delete Trips
-- ☁️ Cloudinary File Storage
-- 📱 Fully Responsive User Interface
+- 🤖 AI-powered Itinerary Generation
+- ✈ Automatic Flight Information Extraction
+- 🏨 Hotel Booking Information Extraction
+- 📂 Dashboard for Trip Management
+- 📋 View Complete Trip Details
+- 🔗 Public Shareable Trip Links
+- 🗑 Delete Saved Trips
+- ☁ Cloudinary File Upload
+- 📱 Fully Responsive Design
 
 ---
 
-# 🛠️ Technology Stack
+# 🛠 Technology Stack
 
 ## 🎨 Frontend
 
-- ⚛️ React.js
+- ⚛ React.js
 - ⚡ Vite
 - 🎨 Tailwind CSS
 - 🌐 Axios
 - 🧭 React Router DOM
 - 🎯 React Icons
 
-## ⚙️ Backend
+## ⚙ Backend
 
 - 🟢 Node.js
 - 🚂 Express.js
@@ -66,10 +83,32 @@ Using OCR, PDF parsing, and Groq AI, the system extracts important travel inform
 - 📦 Mongoose
 - 🔐 JWT Authentication
 - 📤 Multer
-- ☁️ Cloudinary
+- ☁ Cloudinary
 - 🔍 Tesseract OCR
 - 📄 pdf-parse
 - 🤖 Groq AI API
+
+---
+
+# 🏗 System Architecture
+
+```text
+                 React + Tailwind CSS
+                         │
+                         ▼
+                Express.js REST API
+                         │
+        ┌────────────────┼────────────────┐
+        ▼                ▼                ▼
+   JWT Authentication  OCR Engine     PDF Parser
+                           │               │
+                           └──────┬────────┘
+                                  ▼
+                             Groq AI API
+                                  │
+                                  ▼
+                             MongoDB Atlas
+```
 
 ---
 
@@ -77,12 +116,6 @@ Using OCR, PDF parsing, and Groq AI, the system extracts important travel inform
 
 ```text
 TRRIP-AI
-│
-├── frontend
-│   ├── public
-│   ├── src
-│   ├── package.json
-│   └── vite.config.js
 │
 ├── backend
 │   ├── config
@@ -94,6 +127,13 @@ TRRIP-AI
 │   ├── utils
 │   ├── package.json
 │   └── server.js
+│
+├── frontend
+│   ├── public
+│   ├── src
+│   ├── package.json
+│   ├── vite.config.js
+│   └── vercel.json
 │
 ├── screenshots
 │   ├── register.png
@@ -118,7 +158,7 @@ TRRIP-AI
 git clone https://github.com/Lokesh3177/trrip-ai-travel-planner.git
 ```
 
-Move into the project folder.
+Move into the project.
 
 ```bash
 cd trrip-ai-travel-planner
@@ -150,7 +190,7 @@ npm run dev
 
 ---
 
-# ⚙️ Environment Variables
+# ⚙ Environment Variables
 
 ## Backend (.env)
 
@@ -176,8 +216,8 @@ GROQ_API_KEY=
 # Local Development
 VITE_API_URL=http://localhost:5000/api
 
-# Production Example
-# VITE_API_URL=https://your-render-url.onrender.com/api
+# Production
+VITE_API_URL=https://trrip-ai-travel-planner.onrender.com/api
 ```
 
 ---
@@ -186,23 +226,23 @@ VITE_API_URL=http://localhost:5000/api
 
 ```text
 User Registration / Login
-           │
-           ▼
-Upload Flight Ticket / Hotel Booking
-           │
-           ▼
+            │
+            ▼
+Upload Travel Documents
+            │
+            ▼
 OCR & PDF Text Extraction
-           │
-           ▼
+            │
+            ▼
 Groq AI Processing
-           │
-           ▼
+            │
+            ▼
 Generate Structured Travel Itinerary
-           │
-           ▼
-Save to MongoDB Database
-           │
-           ▼
+            │
+            ▼
+Save Data into MongoDB
+            │
+            ▼
 View • Share • Delete Trips
 ```
 
@@ -210,110 +250,73 @@ View • Share • Delete Trips
 
 # 📸 Application Screenshots
 
-<table>
+## 📝 Register
 
-<tr>
+<img src="./screenshots/register.png" width="100%"/>
 
-<td width="50%">
+---
 
-### 📝 Register
+## 🏠 Dashboard
 
-<img src="screenshots/register.png" width="100%"/>
+<img src="./screenshots/dashboard.png" width="100%"/>
 
-</td>
+---
 
-<td width="50%">
+## 📤 Upload Travel Documents
 
-### 🏠 Dashboard
+<img src="./screenshots/upload.png" width="100%"/>
 
-<img src="screenshots/dashboard.png" width="100%"/>
+---
 
-</td>
+## 🤖 AI Processing
 
-</tr>
+<img src="./screenshots/processing.png" width="100%"/>
 
-<tr>
+---
 
-<td>
+## ✈ Trip Details
 
-### 📤 Upload Documents
+<img src="./screenshots/trip-details.png" width="100%"/>
 
-<img src="screenshots/upload.png" width="100%"/>
+---
 
-</td>
+## 🏨 Hotel Details
 
-<td>
+<img src="./screenshots/hotel-details.png" width="100%"/>
 
-### 🤖 AI Processing
+---
 
-<img src="screenshots/processing.png" width="100%"/>
+## 📚 My Trips
 
-</td>
-
-</tr>
-
-<tr>
-
-<td>
-
-### ✈️ Trip Details
-
-<img src="screenshots/trip-details.png" width="100%"/>
-
-</td>
-
-<td>
-
-### 🏨 Hotel Details
-
-<img src="screenshots/hotel-details.png" width="100%"/>
-
-</td>
-
-</tr>
-
-<tr>
-
-<td>
-
-### 📚 My Trips
-
-<img src="screenshots/my-trips.png" width="100%"/>
-
-</td>
-
-<td></td>
-
-</tr>
-
-</table>
+<img src="./screenshots/my-trips.png" width="100%"/>
 
 ---
 
 # 🌐 API Endpoints
 
 | Method | Endpoint | Description |
-|----------|----------|-------------|
+|---------|----------|-------------|
 | POST | `/api/auth/register` | Register User |
 | POST | `/api/auth/login` | Login User |
 | POST | `/api/itineraries/upload` | Upload Travel Documents |
-| GET | `/api/itineraries` | Get All User Trips |
+| GET | `/api/itineraries` | Get All Trips |
 | GET | `/api/itineraries/:id` | Get Trip Details |
 | DELETE | `/api/itineraries/:id` | Delete Trip |
 | GET | `/api/share/:id` | Get Shared Trip |
 
 ---
 
-# 🎯 Future Improvements
+# 🚀 Future Enhancements
 
 - 📅 Google Calendar Integration
 - 📧 Email Itinerary Sharing
 - 🌍 Multi-language Support
 - 🛂 Passport OCR
-- 🛃 Visa Information Detection
+- 🛃 Visa Detection
+- 🗺 Google Maps Integration
 - 📱 Mobile Application
-- 🗺️ Google Maps Integration
-- 🔔 Travel Notifications
+- 🔔 Smart Travel Notifications
+- 💳 Travel Expense Tracking
 
 ---
 
@@ -321,22 +324,22 @@ View • Share • Delete Trips
 
 **Lokesh M**
 
-MERN Stack Developer
+**MERN Stack Developer**
 
 - 💻 GitHub: https://github.com/Lokesh3177
 - 💼 LinkedIn: https://www.linkedin.com/in/lokeshm31/
 
 ---
 
-# 📝 Notes
+# 📝 Project Notes
 
-This project was developed as part of a technical assignment to demonstrate full-stack web development skills using the MERN Stack, OCR, AI integration, cloud services, and modern web development practices.
+This project was developed as part of a technical assessment to demonstrate practical full-stack web development skills using the MERN Stack.
 
-The application automatically extracts travel information from uploaded documents and generates structured travel itineraries to simplify travel planning and management.
+The application integrates OCR, PDF parsing, AI-powered information extraction, cloud storage, secure authentication, and MongoDB to automate travel itinerary generation from uploaded travel documents.
 
 ---
 
-# 📄 License
+# 📄 Disclaimer
 
-This project is intended for educational and technical assessment purposes.
+This project was developed solely for technical assessment and educational purposes. It demonstrates the implementation of a complete MERN Stack application with OCR, AI integration, cloud storage, and responsive user interface design.
 ````
