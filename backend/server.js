@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
-// Load Environment Variables
+// Load environment variables
 dotenv.config();
 
 // Database
@@ -22,54 +22,19 @@ const app = express();
 
 
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://trrip-ai-travel-planner.vercel.app",
-];
-
+// CORS
 app.use(
   cors({
-    origin(origin, callback) {
-      // Allow Postman or server-to-server requests
-      if (!origin) return callback(null, true);
-
-      // Allow localhost
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      // Allow all Vercel preview deployments
-      if (
-        origin.endsWith(".vercel.app") &&
-        origin.includes("trrip-ai-travel-planner")
-      ) {
-        return callback(null, true);
-      }
-
-      return callback(new Error("CORS policy: Origin not allowed"));
-    },
-    credentials: true,
-  })
-);
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow Postman, mobile apps, etc.
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      return callback(new Error("CORS policy: Origin not allowed"));
-    },
+    origin: true,
     credentials: true,
   })
 );
 
+// Parse JSON
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
+// Parse URL Encoded Data
+app.use(express.urlencoded({ extended: true }));
 
 
 app.get("/", (req, res) => {
@@ -95,9 +60,8 @@ app.use((req, res) => {
 });
 
 
-
 app.use((err, req, res, next) => {
-  console.error("GLOBAL ERROR:", err);
+  console.error(err.stack);
 
   res.status(err.statusCode || 500).json({
     status: "error",
