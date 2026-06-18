@@ -11,7 +11,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
-import MyTrip from "./pages/MyTrips";
+import MyTrip from "./pages/myTrips";
 import MyTripsList from "./pages/MyTripsList";
 import ShareView from "./pages/ShareView";
 
