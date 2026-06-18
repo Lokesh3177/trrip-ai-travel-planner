@@ -200,4 +200,4 @@ LinkedIn: https://www.linkedin.com/in/lokeshm31/
 
 ## License
 
-This project is intended for educational and portfolio purposes.
+This project was developed as a full-stack portfolio application to demonstrate modern web development practices using the MERN Stack, AI integration, OCR, and cloud services.
