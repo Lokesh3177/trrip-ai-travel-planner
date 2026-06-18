@@ -2,53 +2,100 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
-const connectDB = require("./config/db");
-const authRoutes = require("./routes/authRoutes");
-const uploadRoutes = require("./routes/uploadRoutes");
-const itineraryRoutes = require(
-  "./routes/itineraryRoutes"
-);
-const shareRoutes = require("./routes/shareRoutes");
-
 // Load Environment Variables
 dotenv.config();
+
+// Database
+const connectDB = require("./config/db");
+
+// Initialize Cloudinary
+require("./config/cloudinary");
+
+// Routes
+const authRoutes = require("./routes/authRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
+const itineraryRoutes = require("./routes/itineraryRoutes");
+const shareRoutes = require("./routes/shareRoutes");
 
 // Create Express App
 const app = express();
 
 
 
-// Cloudinary
-const cloudinary = require("./config/cloudinary");
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://trrip-ai-travel-planner.vercel.app",
+];
 
-// Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin(origin, callback) {
+      // Allow Postman or server-to-server requests
+      if (!origin) return callback(null, true);
+
+      // Allow localhost
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Allow all Vercel preview deployments
+      if (
+        origin.endsWith(".vercel.app") &&
+        origin.includes("trrip-ai-travel-planner")
+      ) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("CORS policy: Origin not allowed"));
+    },
+    credentials: true,
+  })
+);
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow Postman, mobile apps, etc.
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("CORS policy: Origin not allowed"));
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Health Check
+
+
 app.get("/", (req, res) => {
   res.status(200).json({
     status: "success",
-    message: "trip travel api running",
+    message: "TRRIP AI Travel Planner API is running 🚀",
   });
 });
 
 
 
-// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/itineraries", itineraryRoutes);
 app.use("/api/share", shareRoutes);
-// 404 Route
+
+
 app.use((req, res) => {
   res.status(404).json({
     status: "fail",
-    message: `Can't find ${req.originalUrl} on this server.`,
+    message: `Cannot find ${req.originalUrl}`,
   });
 });
 
-// Global Error Handler
+
+
 app.use((err, req, res, next) => {
   console.error("GLOBAL ERROR:", err);
 
@@ -58,7 +105,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Server Start
+
+
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
@@ -67,14 +115,11 @@ const startServer = async () => {
 
     app.listen(PORT, () => {
       console.log(
-        `[SUCCESS] Server running in ${process.env.NODE_ENV || "development"
-        } mode on port ${PORT}`
+        `🚀 Server running on port ${PORT} (${process.env.NODE_ENV || "development"})`
       );
     });
   } catch (error) {
-    console.error(
-      `[CRITICAL] Database connection failed: ${error.message}`
-    );
+    console.error("❌ Database Connection Failed:", error.message);
     process.exit(1);
   }
 };
