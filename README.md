@@ -429,8 +429,7 @@ VITE_API_URL=https://trrip-ai-travel-planner.onrender.com/api
 - Mobile Friendly
 
 ---
-````
-```markdown
+
 # 📚 Key Learning Outcomes
 
 This project demonstrates practical experience with modern full-stack web development technologies and AI-powered document processing.
